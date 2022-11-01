@@ -7,7 +7,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
@@ -15,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.ZoneId;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class mainController implements Initializable {
@@ -26,8 +29,7 @@ public class mainController implements Initializable {
 
         Locale locale = Locale.getDefault();
         locLabel.setText("Location: " + ZoneId.systemDefault());
-        ResourceBundle rb = ResourceBundle.getBundle("src/Login", Locale.getDefault());
-        if()
+
     }
     @FXML
     public  void toDirectory(ActionEvent actionEvent) throws IOException {
@@ -36,5 +38,14 @@ public class mainController implements Initializable {
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+    }
+    public void ExitWindow(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Exit");
+        alert.setContentText("Are you sure you want to exit?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            System.exit(0);
+        }
     }
 }
