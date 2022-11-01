@@ -21,4 +21,10 @@ public class directoryController {
             System.exit(0);
         }
     }
+
+    public void GoToAppts(ActionEvent actionEvent) {
+    }
+
+    public void GoToCustomers(ActionEvent actionEvent) {
+    }
 }
