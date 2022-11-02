@@ -29,7 +29,6 @@ public class mainController implements Initializable {
 
         Locale locale = Locale.getDefault();
         locLabel.setText("Location: " + ZoneId.systemDefault());
-
     }
     @FXML
     public  void toDirectory(ActionEvent actionEvent) throws IOException {
