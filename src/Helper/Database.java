@@ -13,6 +13,7 @@ public class Database {
     private static final String username = "sqlUser";
     private static final String password = "Passw0rd!";
     public static Connection connection;
+    public static Connection getConnection;
 
     public static void openConnection() {
         try {
@@ -23,6 +24,9 @@ public class Database {
         catch(Exception e) {
             System.out.println("error:" + e.getMessage());
         }
+    }
+    public static  Connection getConnection() {
+        return connection;
     }
     public static void closeConnection() {
         try {

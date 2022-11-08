@@ -20,15 +20,23 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class mainController implements Initializable {
+public class loginController implements Initializable {
     public Button loginButton;
     public Label locLabel;
+    public Label usernameLabel;
+    public Label passwordLabel;
+    public Button exitButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        ResourceBundle rb = ResourceBundle.getBundle("Language/Login", Locale.getDefault());
+        //Locale.setDefault(new Locale("fr"));
         Locale locale = Locale.getDefault();
-        locLabel.setText("Location: " + ZoneId.systemDefault());
+        usernameLabel.setText(rb.getString("username"));
+        passwordLabel.setText(rb.getString("password"));
+        loginButton.setText(rb.getString("login"));
+        exitButton.setText(rb.getString("exit"));
+        locLabel.setText(rb.getString("location") + ": " + ZoneId.systemDefault());
     }
     @FXML
     public  void toDirectory(ActionEvent actionEvent) throws IOException {
@@ -39,12 +47,6 @@ public class mainController implements Initializable {
         stage.show();
     }
     public void ExitWindow(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Exit");
-        alert.setContentText("Are you sure you want to exit?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
             System.exit(0);
-        }
     }
 }
