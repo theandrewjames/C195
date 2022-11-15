@@ -3,6 +3,7 @@ package Controller;
 import Helper.DBappt;
 import Model.Appointments;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -40,12 +41,20 @@ public class apptViewController implements Initializable {
         custIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         userIDCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
         try {
-            ObservableList<Appointments> apptList = DBappt.getAllAppts();
-            apptTV.setItems(apptList);
+            apptTV.setItems(DBappt.getAllAppts());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
 
+    }
+
+    public void filterWeek(ActionEvent actionEvent) {
+    }
+
+    public void filterMonth(ActionEvent actionEvent) {
+    }
+
+    public void filterAll(ActionEvent actionEvent) {
     }
 }

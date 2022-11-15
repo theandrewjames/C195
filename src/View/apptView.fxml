@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
-
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.apptViewController">
    <children>
@@ -26,5 +28,12 @@
       <Button layoutX="152.0" layoutY="291.0" mnemonicParsing="false" text="Edit" />
       <Button layoutX="189.0" layoutY="291.0" mnemonicParsing="false" text="Delete" />
       <Button layoutX="240.0" layoutY="291.0" mnemonicParsing="false" text="Back" />
+      <RadioButton layoutX="84.0" layoutY="66.0" mnemonicParsing="false" onAction="#filterWeek" text="Week">
+         <toggleGroup>
+            <ToggleGroup fx:id="filterRadio" />
+         </toggleGroup></RadioButton>
+      <RadioButton layoutX="146.0" layoutY="66.0" mnemonicParsing="false" onAction="#filterMonth" text="Month" toggleGroup="$filterRadio" />
+      <RadioButton layoutX="215.0" layoutY="66.0" mnemonicParsing="false" onAction="#filterAll" selected="true" text="All" toggleGroup="$filterRadio" />
+      <Label layoutX="27.0" layoutY="66.0" text="Filter by:" />
    </children>
 </AnchorPane>

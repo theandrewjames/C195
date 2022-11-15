@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+//Retries all appointments
 public class DBappt {
     public static ObservableList<Appointments>getAllAppts() throws SQLException {
         ObservableList<Appointments> appts = FXCollections.observableArrayList();

@@ -29,14 +29,64 @@ public class Appointments {
         this.userID = userID;
         this.contactID = contactID;
     }
+
+    /**
+     * getter of appt ID
+     * @return appt ID
+     */
     public Integer getApptID() { return apptID;};
+
+    /**
+     * getter of appt title
+     * @return appt tile
+     */
     public String getApptTitle() { return apptTitle;};
+
+    /**
+     * getter of appt description
+     * @return appt description
+     */
     public String getApptDescription() {return apptDescription;};
+
+    /**
+     * getter of appt location
+     * @return appt location
+     */
     public String getApptLocation() {return apptLocation;};
+
+    /**
+     * getter of appt type
+     * @return appt type
+     */
     public String getApptType() {return apptType;};
+
+    /**
+     * getter of start time
+     * @return start time of appt
+     */
     public LocalDateTime getStartTime() {return startTime;};
+
+    /**
+     * getter of end time
+     * @return end time of appt
+     */
     public LocalDateTime getEndTime() {return endTime;};
+
+    /**
+     * getter of customer ID
+     * @return customer ID
+     */
     public Integer getCustomerID() {return customerID;};
+
+    /**
+     * getter of user ID
+     * @return user ID
+     */
     public Integer getUserID() {return userID;};
+
+    /**
+     * getter of contact ID
+     * @return contact ID
+     */
     public Integer getContactID() {return contactID;};
 }
