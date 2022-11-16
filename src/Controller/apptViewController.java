@@ -2,6 +2,7 @@ package Controller;
 
 import Helper.DBappt;
 import Model.Appointments;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -11,7 +12,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class apptViewController implements Initializable {
@@ -30,6 +35,12 @@ public class apptViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ObservableList<Appointments> allAppts = null;
+        try {
+            allAppts = DBappt.getAllAppts();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         apptIDCol.setCellValueFactory(new PropertyValueFactory<>("apptID"));
         titleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
         descriptCol.setCellValueFactory(new PropertyValueFactory<>("apptDescription"));
@@ -40,21 +51,56 @@ public class apptViewController implements Initializable {
         endCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         custIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         userIDCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
-        try {
-            apptTV.setItems(DBappt.getAllAppts());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        apptTV.setItems(allAppts);
 
 
     }
 
-    public void filterWeek(ActionEvent actionEvent) {
+    /**
+     *
+     * @param actionEvent filters appts by current week
+     * @throws SQLException
+     */
+    public void filterWeek(ActionEvent actionEvent) throws SQLException {
+        LocalDateTime start = LocalDateTime.now().minusWeeks(1);
+        LocalDateTime end = LocalDateTime.now().plusWeeks(1);
+        ObservableList<Appointments> allAppts = DBappt.getAllAppts();
+        ObservableList<Appointments> apptsWeek = FXCollections.observableArrayList();
+        allAppts.forEach(appointments -> {
+            if(appointments.getStartTime().isEqual(start) || appointments.getEndTime().isEqual(end)
+            || (appointments.getStartTime().isAfter(start) && appointments.getEndTime().isBefore(end))){
+                apptsWeek.add(appointments);
+            }
+        });
+            apptTV.setItems(apptsWeek);
     }
 
-    public void filterMonth(ActionEvent actionEvent) {
+    /**
+     *
+     * @param actionEvent filters appointment tableview by current month
+     * @throws SQLException
+     */
+    public void filterMonth(ActionEvent actionEvent) throws SQLException {
+        ObservableList<Appointments> allAppts = DBappt.getAllAppts();
+        ObservableList<Appointments> apptsMonth = FXCollections.observableArrayList();
+        LocalDate currentDate = LocalDate.now();
+        int currentMonth = currentDate.getMonthValue();
+        int currentYear = currentDate.getYear();
+        allAppts.forEach(appointments -> {
+            if(appointments.getStartTime().getMonthValue() == currentMonth && appointments.getStartTime().getYear() == currentYear) {
+                apptsMonth.add(appointments);
+            }
+        });
+        apptTV.setItems(apptsMonth);
+
     }
 
-    public void filterAll(ActionEvent actionEvent) {
+    /**
+     * removes month/week filter and displays all appts
+     * @param actionEvent
+     */
+    public void filterAll(ActionEvent actionEvent) throws SQLException {
+        ObservableList<Appointments> allAppts = DBappt.getAllAppts();
+        apptTV.setItems(allAppts);
     }
 }
