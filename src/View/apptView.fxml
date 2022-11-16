@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.apptViewController">
    <children>
-      <TableView fx:id="apptTV" editable="true" layoutX="27.0" layoutY="83.0" prefHeight="200.0" prefWidth="490.0">
+      <TableView fx:id="apptTV" editable="true" layoutX="15.0" layoutY="83.0" prefHeight="200.0" prefWidth="583.0">
         <columns>
           <TableColumn fx:id="apptIDCol" prefWidth="56.0" text="Appt ID" />
           <TableColumn fx:id="titleCol" prefWidth="51.0" text="Title" />
@@ -24,10 +24,10 @@
             <TableColumn fx:id="userIDCol" prefWidth="54.0" text="User ID" />
         </columns>
       </TableView>
-      <Button layoutX="114.0" layoutY="291.0" mnemonicParsing="false" text="Add" />
-      <Button layoutX="152.0" layoutY="291.0" mnemonicParsing="false" text="Edit" />
-      <Button layoutX="189.0" layoutY="291.0" mnemonicParsing="false" text="Delete" />
-      <Button layoutX="240.0" layoutY="291.0" mnemonicParsing="false" text="Back" />
+      <Button onAction="#AddAppt" layoutX="114.0" layoutY="291.0" mnemonicParsing="false" text="Add" />
+      <Button onAction="#EditAppt" layoutX="152.0" layoutY="291.0" mnemonicParsing="false" text="Edit" />
+      <Button onAction="#DeleteAppt" layoutX="189.0" layoutY="291.0" mnemonicParsing="false" text="Delete" />
+      <Button onAction="#Back" layoutX="240.0" layoutY="291.0" mnemonicParsing="false" text="Back" />
       <RadioButton layoutX="84.0" layoutY="66.0" mnemonicParsing="false" onAction="#filterWeek" text="Week">
          <toggleGroup>
             <ToggleGroup fx:id="filterRadio" />

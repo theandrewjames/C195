@@ -5,11 +5,17 @@ import Model.Appointments;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
@@ -102,5 +108,27 @@ public class apptViewController implements Initializable {
     public void filterAll(ActionEvent actionEvent) throws SQLException {
         ObservableList<Appointments> allAppts = DBappt.getAllAppts();
         apptTV.setItems(allAppts);
+    }
+
+    /**
+     *
+     * @param actionEvent returns user to directory page by clicking back button
+     * @throws IOException
+     */
+    public void Back(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/View/Directory.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void DeleteAppt(ActionEvent actionEvent) {
+    }
+
+    public void EditAppt(ActionEvent actionEvent) {
+    }
+
+    public void AddAppt(ActionEvent actionEvent) {
     }
 }
