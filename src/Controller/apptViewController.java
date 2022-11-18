@@ -51,7 +51,7 @@ public class apptViewController implements Initializable {
         titleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
         descriptCol.setCellValueFactory(new PropertyValueFactory<>("apptDescription"));
         locCol.setCellValueFactory(new PropertyValueFactory<>("apptLocation"));
-        contactCol.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+        contactCol.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
         startCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         endCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
@@ -129,6 +129,11 @@ public class apptViewController implements Initializable {
     public void EditAppt(ActionEvent actionEvent) {
     }
 
-    public void AddAppt(ActionEvent actionEvent) {
+    public void AddAppt(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/View/apptAdd.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 }
