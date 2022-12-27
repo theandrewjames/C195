@@ -46,6 +46,13 @@ public class CustomerViewController implements Initializable {
 
 
     }
+    public void Add(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/View/customerAdd.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
     public void Back(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/Directory.fxml"));
         Scene scene = new Scene(root);

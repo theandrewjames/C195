@@ -14,7 +14,7 @@
             <TableColumn fx:id="customerIdTC" prefWidth="60.0" text="ID" />
         </columns>
       </TableView>
-      <Button fx:id="addButton" layoutX="83.0" layoutY="285.0" mnemonicParsing="false" text="Add" />
+      <Button fx:id="addButton" onAction="#Add" layoutX="83.0" layoutY="285.0" mnemonicParsing="false" text="Add" />
       <Button fx:id="editButton" layoutX="121.0" layoutY="285.0" mnemonicParsing="false" text="Edit" />
       <Button fx:id="deleteButton" layoutX="158.0" layoutY="285.0" mnemonicParsing="false" text="Delete" />
       <Button onAction="#Back" fx:id="backButton" layoutX="209.0" layoutY="285.0" mnemonicParsing="false" text="Back" />
