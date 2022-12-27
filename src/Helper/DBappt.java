@@ -1,6 +1,7 @@
 package Helper;
 
 import Model.Appointments;
+import Model.Customers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -36,5 +37,19 @@ public class DBappt {
         }
         return appts;
 
+    }
+    public static ObservableList<Customers> getAllCustomers() throws SQLException {
+        ObservableList<Customers> customers = FXCollections.observableArrayList();
+        String sql = "SELECT customers.customer_name, customers.customer_id, customers.phone FROM customers";
+        PreparedStatement ps = Database.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()) {
+            int customerId = rs.getInt("Customer_ID");
+            String customerName = rs.getString("Customer_Name");
+            String customerPhone = rs.getString("Phone");
+            Customers customer = new Customers(customerId, customerName, customerPhone);
+            customers.add(customer);
+        }
+        return customers;
     }
 }

@@ -36,6 +36,11 @@ public class directoryController {
         stage.show();
     }
 
-    public void GoToCustomers(ActionEvent actionEvent) {
+    public void GoToCustomers(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/View/CustomerView.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 }
