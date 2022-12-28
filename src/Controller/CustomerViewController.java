@@ -30,6 +30,10 @@ public class CustomerViewController implements Initializable {
     public Button editButton;
     public Button deleteButton;
     public Button backButton;
+    public TableColumn cusAddressTC;
+    public TableColumn custPostalTC;
+    public TableColumn custDivisionTC;
+    public TableColumn custCountryTC;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -42,6 +46,10 @@ public class CustomerViewController implements Initializable {
         customerNameTC.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         customerPhoneTC.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
         customerIdTC.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        cusAddressTC.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
+        custPostalTC.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        custDivisionTC.setCellValueFactory(new PropertyValueFactory<>("divison"));
+        custCountryTC.setCellValueFactory(new PropertyValueFactory<>("country"));
         customerTV.setItems(allCustomers);
 
 
