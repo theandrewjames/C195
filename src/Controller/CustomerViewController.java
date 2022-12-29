@@ -1,5 +1,6 @@
 package Controller;
 
+import Helper.DBCustomer;
 import Helper.DBappt;
 import Model.Customers;
 import javafx.collections.ObservableList;
@@ -39,7 +40,7 @@ public class CustomerViewController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ObservableList<Customers> allCustomers = null;
         try {
-            allCustomers = DBappt.getAllCustomers();
+            allCustomers = DBCustomer.getAllCustomers();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -56,6 +57,17 @@ public class CustomerViewController implements Initializable {
     }
     public void Add(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/customerAdd.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+    public void Update(ActionEvent actionEvent) throws IOException, SQLException {
+        Customers customer = (Customers) customerTV.getSelectionModel().getSelectedItem();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/customerUpdate.fxml"));
+        Parent root = loader.load();
+        CustomerUpdateController cuc = loader.getController();
+        cuc.loadCustomer(customer);
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);

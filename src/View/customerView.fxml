@@ -14,12 +14,12 @@
             <TableColumn fx:id="customerIdTC" prefWidth="60.0" text="ID" />
             <TableColumn fx:id="cusAddressTC" prefWidth="60.0" text="Address" />
             <TableColumn fx:id="custPostalTC" prefWidth="60.0" text="Postal" />
-            <TableColumn fx:id="custDivisionTC" prefWidth="60.0" text="Division" />
+            <TableColumn fx:id="custDivisionTC" prefWidth="60.0" text="Region" />
             <TableColumn fx:id="custCountryTC" prefWidth="60.0" text="Country" />
         </columns>
       </TableView>
       <Button fx:id="addButton" layoutX="83.0" layoutY="285.0" mnemonicParsing="false" onAction="#Add" text="Add" />
-      <Button fx:id="editButton" layoutX="121.0" layoutY="285.0" mnemonicParsing="false" text="Edit" />
+      <Button fx:id="editButton" onAction="#Update" layoutX="121.0" layoutY="285.0" mnemonicParsing="false" text="Edit" />
       <Button fx:id="deleteButton" layoutX="158.0" layoutY="285.0" mnemonicParsing="false" text="Delete" />
       <Button fx:id="backButton" layoutX="209.0" layoutY="285.0" mnemonicParsing="false" onAction="#Back" text="Back" />
    </children>

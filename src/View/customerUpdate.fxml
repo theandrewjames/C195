@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CustomerAddController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CustomerUpdateController">
    <children>
       <GridPane layoutX="89.0" layoutY="105.0">
         <columnConstraints>
@@ -40,7 +40,7 @@
             <ComboBox fx:id="divisionCB" layoutX="210.0" layoutY="73.0" prefWidth="150.0" promptText="Region" GridPane.columnIndex="3" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <Button onAction="#AddCustomerSave" layoutX="142.0" layoutY="255.0" mnemonicParsing="false" text="Add Customer" />
+      <Button onAction="#UpdateCustomerSave" layoutX="142.0" layoutY="255.0" mnemonicParsing="false" text="Update Customer" />
       <Button layoutX="242.0" layoutY="255.0" mnemonicParsing="false" onAction="#Back" text="Back" />
    </children>
 </AnchorPane>
