@@ -126,7 +126,16 @@ public class apptViewController implements Initializable {
     public void DeleteAppt(ActionEvent actionEvent) {
     }
 
-    public void EditAppt(ActionEvent actionEvent) {
+    public void EditAppt(ActionEvent actionEvent) throws IOException {
+        Appointments appt = apptTV.getSelectionModel().getSelectedItem();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/apptUpdate.fxml"));
+        Parent root = loader.load();
+        ApptUpdateController auc = loader.getController();
+        auc.loadAppt(appt);
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void AddAppt(ActionEvent actionEvent) throws IOException {

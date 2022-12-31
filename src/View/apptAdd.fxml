@@ -32,7 +32,7 @@
         </rowConstraints>
          <children>
             <Label text="Appt ID" />
-            <TextField fx:id="apptIDTF" disable="true" text="Disabled" GridPane.columnIndex="1" />
+            <TextField fx:id="apptIDTF" disable="true" GridPane.columnIndex="1" />
             <Label text="Title" GridPane.rowIndex="1" />
             <TextField fx:id="apptTitleTF" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Description" GridPane.rowIndex="2" />
@@ -47,12 +47,12 @@
             <DatePicker fx:id="startDateDP" promptText="Date" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <ComboBox fx:id="startCB" prefWidth="150.0" promptText="Time" GridPane.columnIndex="2" GridPane.rowIndex="6" />
             <Label text="End date/time" GridPane.rowIndex="7" />
-            <DatePicker promptText="Date" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <DatePicker fx:id="endDateDP" promptText="Date" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <ComboBox fx:id="endCB" prefWidth="150.0" promptText="Time" GridPane.columnIndex="2" GridPane.rowIndex="7" />
             <Label text="Customer ID" GridPane.rowIndex="8" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <Label text="User ID" GridPane.rowIndex="9" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="userIdCB" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="custIdCB" layoutX="110.0" layoutY="283.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </children>
       </GridPane>
       <Button layoutX="237.0" layoutY="346.0" mnemonicParsing="false" onAction="#Back" text="Back" />

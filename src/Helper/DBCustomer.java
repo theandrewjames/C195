@@ -55,5 +55,16 @@ public class DBCustomer {
         }
         return highest;
     }
+    public static ObservableList<Integer> GetCustIds() throws SQLException {
+        ObservableList<Integer> custIds = FXCollections.observableArrayList();
+        String sql = "SELECT Customer_ID from customers ORDER BY Customer_ID";
+        PreparedStatement ps = Database.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()) {
+            Integer customerId = rs.getInt("Customer_ID");
+            custIds.add(customerId);
+        }
+        return custIds;
+    }
 
 }

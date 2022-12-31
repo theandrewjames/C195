@@ -1,6 +1,8 @@
 package Controller;
 
 import Helper.DBContacts;
+import Helper.DBCustomer;
+import Helper.DBappt;
 import Model.Contacts;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,6 +37,10 @@ public class ApptAddController implements Initializable {
     public DatePicker startDateDP;
     public ComboBox startCB;
     public ComboBox endCB;
+    public DatePicker endDateDP;
+    public TextField customerIdTF;
+    public ComboBox userIdCB;
+    public ComboBox custIdCB;
 
 
     public void Back(ActionEvent actionEvent) throws IOException {
@@ -54,10 +60,18 @@ public class ApptAddController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            int nextId = 0;
+            nextId = DBappt.getNextApptId() + 1;
+            apptIDTF.setText(String.valueOf(nextId));
             contactCombo.setItems(DBContacts.getContactNames());
+            ObservableList<Integer> custIds = FXCollections.observableArrayList();
+            custIdCB.setItems(DBCustomer.GetCustIds());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        ObservableList<Integer> users = FXCollections.observableArrayList();
+        users.addAll(1, 2);
+        userIdCB.setItems(users);
         ObservableList<String> times = FXCollections.observableArrayList();
         String [] halfHour = {"00", "30"};
         for(int i = 0;i < 24;i++) {
@@ -74,12 +88,18 @@ public class ApptAddController implements Initializable {
     }
 
     public void AddAppt(ActionEvent actionEvent) {
-    String title = apptTitleTF.getText();
-    String description = apptDescriptTF.getText();
-    String location = apptLocTF.getText();
-    String contactName = contactCombo.getValue().toString();
-    String type = typeTF.getText();
-    LocalDate startDate = startDateDP.getValue();
+        Integer apptId = Integer.parseInt(apptIDTF.getText());
+        String title = apptTitleTF.getText();
+        String description = apptDescriptTF.getText();
+        String location = apptLocTF.getText();
+        String contactName = contactCombo.getValue().toString();
+        String type = typeTF.getText();
+        LocalDate startDate = startDateDP.getValue();
+
+        LocalDate endDate = endDateDP.getValue();
+
+        Integer userId = Integer.parseInt(userIdCB.getValue().toString());
+        Integer customerId = Integer.parseInt(customerIdTF.getText());
 
     }
 }

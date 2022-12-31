@@ -38,5 +38,15 @@ public class DBappt {
         return appts;
 
     }
+    public static int getNextApptId() throws SQLException {
+        String sql = "SELECT max(Appointment_ID) FROM appointments";
+        PreparedStatement ps = Database.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        int highest = 0;
+        while(rs.next()) {
+            highest = rs.getInt("MAX(Appointment_ID)");
+        }
+        return highest;
+    }
 
 }
