@@ -3,6 +3,7 @@ package Controller;
 import Helper.DBContacts;
 import Helper.DBCustomer;
 import Helper.DBappt;
+import Model.Appointments;
 import Model.Contacts;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,17 +13,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
@@ -87,19 +86,86 @@ public class ApptAddController implements Initializable {
         endCB.setItems(times);
     }
 
-    public void AddAppt(ActionEvent actionEvent) {
-        Integer apptId = Integer.parseInt(apptIDTF.getText());
-        String title = apptTitleTF.getText();
-        String description = apptDescriptTF.getText();
-        String location = apptLocTF.getText();
-        String contactName = contactCombo.getValue().toString();
-        String type = typeTF.getText();
-        LocalDate startDate = startDateDP.getValue();
+    public  boolean AddAppt(ActionEvent actionEvent) throws SQLException, IOException {
+        try {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+            Integer apptId = Integer.parseInt(apptIDTF.getText());
+            String title = apptTitleTF.getText();
+            String description = apptDescriptTF.getText();
+            String location = apptLocTF.getText();
+            String contactName = contactCombo.getValue().toString();
+            String type = typeTF.getText();
+            LocalDate startDate = startDateDP.getValue();
+            LocalTime startTime = LocalTime.parse(startCB.getValue().toString());
+            LocalDateTime startDT = LocalDateTime.of(startDate, startTime);
+            LocalDate endDate = endDateDP.getValue();
+            LocalTime endTime = LocalTime.parse(endCB.getValue().toString());
+            LocalDateTime endDT = LocalDateTime.of(endDate, endTime);
+            //Checking below if appt is between 8am-10pm EST
+            ZonedDateTime open = ZonedDateTime.of(startDate, LocalTime.of(8, 00), ZoneId.of("America/New_York"));
+            ZonedDateTime close = ZonedDateTime.of(endDate, LocalTime.of(22, 00), ZoneId.of("America/New_York"));
+            ZonedDateTime startAppt = ZonedDateTime.of(startDate, startTime, ZoneId.of("America/New_York"));
+            ZonedDateTime endAppt = ZonedDateTime.of(endDate, endTime, ZoneId.of("America/New_York"));
+            if (startAppt.isBefore(open) || startAppt.isAfter(close) || endAppt.isBefore(open) || endAppt.isAfter(close)) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("WARNING");
+                alert.setContentText("Please select a time between business hours of 8am-10pm EST");
+                Optional<ButtonType> result = alert.showAndWait();
+                return false;
+            }
+            //Check if appt start time is before appt end time
+            if (startAppt.isAfter(endAppt) || startAppt.isEqual(endAppt)) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("WARNING");
+                alert.setContentText("Start time needs to before end time");
+                Optional<ButtonType> result = alert.showAndWait();
+                return false;
+            }
+            Integer userId = Integer.parseInt(userIdCB.getValue().toString());
+            Integer customerId = Integer.parseInt(custIdCB.getValue().toString());
+            //Checks if appts overlap
+            if (overlapCheck(startDT, endDT, customerId) == false) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Time error");
+                alert.setContentText("Unable to schedule appt during existing appt");
+                Optional<ButtonType> result = alert.showAndWait();
+                return false;
+            }
+            ;
+            Appointments appt = new Appointments(apptId, title, description, location, type, startDT,
+                    endDT, customerId, userId, contactName);
+            if (DBappt.addAppt(appt) == 1) {
+                Parent root = FXMLLoader.load(getClass().getResource("/View/apptView.fxml"));
+                Scene scene = new Scene(root);
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+                return true;
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Database error");
+                alert.setContentText("Unable to add appt. Please try again");
+                Optional<ButtonType> result = alert.showAndWait();
+                return false;
+            }
+        }
+        catch(Exception e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Please complete form");
+            alert.setContentText("Please do not leave any empty fields");
+            Optional<ButtonType> result = alert.showAndWait();
+            return false;
+        }
+    }
 
-        LocalDate endDate = endDateDP.getValue();
+    public boolean overlapCheck(LocalDateTime startDT, LocalDateTime endDT, Integer customerID) throws SQLException {
+        ObservableList<Appointments> appts = DBappt.getAllAppts();
+        for(Appointments appt : appts) {
+            if(appt.getCustomerID() == customerID && (startDT.isAfter(appt.getStartTime()) || endDT.isBefore(appt.getEndTime()))){
 
-        Integer userId = Integer.parseInt(userIdCB.getValue().toString());
-        Integer customerId = Integer.parseInt(customerIdTF.getText());
-
+                return false;
+            }
+        }
+        return true;
     }
 }

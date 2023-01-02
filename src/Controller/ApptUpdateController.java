@@ -12,9 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,6 +20,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ApptUpdateController implements Initializable {
@@ -47,6 +46,15 @@ public class ApptUpdateController implements Initializable {
     }
 
     public void UpdateAppt(ActionEvent actionEvent) {
+        try {
+
+        }
+        catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Missing info/fields");
+            alert.setTitle("Warning");
+            Optional<ButtonType> result = alert.showAndWait();
+        }
     }
     public void loadAppt(Appointments appt) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");

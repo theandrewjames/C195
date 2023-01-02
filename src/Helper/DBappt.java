@@ -8,7 +8,9 @@ import javafx.collections.ObservableList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 //Retrieves all appointments
 public class DBappt {
@@ -48,5 +50,31 @@ public class DBappt {
         }
         return highest;
     }
-
+    public static int addAppt(Appointments appointments) throws  SQLException {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String contactName = appointments.getContactName();
+        Integer contactId = 0;
+        if(contactName.equals("Anika Costa")) contactId = 1;
+        else if(contactName.equals("Daniel Garcia")) contactId = 2;
+        else contactId =3;
+        String sql = "INSERT INTO appointments(Appointment_ID, Title, Description, Location, Type, Start,End, Create_Date," +
+                "Created_By,Last_Update,Last_Updated_By,Customer_ID,User_ID,Contact_ID)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?, ?)";
+        PreparedStatement ps = Database.connection.prepareStatement(sql);
+        ps.setInt(1,appointments.getApptID());
+        ps.setString(2,appointments.getApptTitle());
+        ps.setString(3,appointments.getApptDescription());
+        ps.setString(4,appointments.getApptLocation());
+        ps.setString(5, appointments.getApptType());
+        ps.setTimestamp(6, Timestamp.valueOf(appointments.getStartTime().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+        ps.setTimestamp(7, Timestamp.valueOf(appointments.getEndTime().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+        ps.setTimestamp(8, Timestamp.valueOf(ZonedDateTime.now(ZoneOffset.UTC).format(dtf)));
+        ps.setString(9, "Admin");
+        ps.setTimestamp(10, Timestamp.valueOf(ZonedDateTime.now(ZoneOffset.UTC).format(dtf)));
+        ps.setString(11, "Admin");
+        ps.setInt(12, appointments.getCustomerID());
+        ps.setInt(13, appointments.getUserID());
+        ps.setInt(14, contactId);
+        int rs = ps.executeUpdate();
+        return rs;
+    }
 }
