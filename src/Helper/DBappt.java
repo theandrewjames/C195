@@ -1,7 +1,6 @@
 package Helper;
 
 import Model.Appointments;
-import Model.Customers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -65,8 +64,8 @@ public class DBappt {
         ps.setString(3,appointments.getApptDescription());
         ps.setString(4,appointments.getApptLocation());
         ps.setString(5, appointments.getApptType());
-        ps.setTimestamp(6, Timestamp.valueOf(appointments.getStartTime().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
-        ps.setTimestamp(7, Timestamp.valueOf(appointments.getEndTime().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+        ps.setTimestamp(6, Timestamp.valueOf(appointments.getStartTime().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).format(dtf)));
+        ps.setTimestamp(7, Timestamp.valueOf(appointments.getEndTime().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).format(dtf)));
         ps.setTimestamp(8, Timestamp.valueOf(ZonedDateTime.now(ZoneOffset.UTC).format(dtf)));
         ps.setString(9, "Admin");
         ps.setTimestamp(10, Timestamp.valueOf(ZonedDateTime.now(ZoneOffset.UTC).format(dtf)));
@@ -76,5 +75,11 @@ public class DBappt {
         ps.setInt(14, contactId);
         int rs = ps.executeUpdate();
         return rs;
+    }
+    public static void deleteAppt(Appointments appt) throws SQLException {
+        String sql = "DELETE from appointments WHERE Appointment_ID = ?";
+        PreparedStatement ps = Database.connection.prepareStatement(sql);
+        ps.setInt(1,appt.getApptID());
+        int rowsAffected = ps.executeUpdate();
     }
 }

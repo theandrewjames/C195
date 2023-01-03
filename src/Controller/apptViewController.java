@@ -2,6 +2,7 @@ package Controller;
 
 import Helper.DBappt;
 import Model.Appointments;
+import com.sun.scenario.effect.Offset;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,7 +42,6 @@ public class apptViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
         ObservableList<Appointments> allAppts = null;
         try {
             allAppts = DBappt.getAllAppts();
@@ -124,7 +124,10 @@ public class apptViewController implements Initializable {
         stage.show();
     }
 
-    public void DeleteAppt(ActionEvent actionEvent) {
+    public void DeleteAppt(ActionEvent actionEvent) throws SQLException {
+        Appointments appt = apptTV.getSelectionModel().getSelectedItem();
+        DBappt.deleteAppt(appt);
+        apptTV.setItems(DBappt.getAllAppts());
     }
 
     public void EditAppt(ActionEvent actionEvent) throws IOException {

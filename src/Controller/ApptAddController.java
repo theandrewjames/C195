@@ -87,7 +87,7 @@ public class ApptAddController implements Initializable {
     }
 
     public  boolean AddAppt(ActionEvent actionEvent) throws SQLException, IOException {
-        try {
+
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
             Integer apptId = Integer.parseInt(apptIDTF.getText());
             String title = apptTitleTF.getText();
@@ -102,11 +102,13 @@ public class ApptAddController implements Initializable {
             LocalTime endTime = LocalTime.parse(endCB.getValue().toString());
             LocalDateTime endDT = LocalDateTime.of(endDate, endTime);
             //Checking below if appt is between 8am-10pm EST
-            ZonedDateTime open = ZonedDateTime.of(startDate, LocalTime.of(8, 00), ZoneId.of("America/New_York"));
-            ZonedDateTime close = ZonedDateTime.of(endDate, LocalTime.of(22, 00), ZoneId.of("America/New_York"));
-            ZonedDateTime startAppt = ZonedDateTime.of(startDate, startTime, ZoneId.of("America/New_York"));
-            ZonedDateTime endAppt = ZonedDateTime.of(endDate, endTime, ZoneId.of("America/New_York"));
-            if (startAppt.isBefore(open) || startAppt.isAfter(close) || endAppt.isBefore(open) || endAppt.isAfter(close)) {
+            LocalTime open = LocalTime.of(8, 00);
+            LocalTime close = LocalTime.of(22, 00);
+            ZonedDateTime startAppt = startDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("America/New_York"));
+            ZonedDateTime endAppt = endDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("America/New_York"));
+            LocalTime endApptLocal = endAppt.toLocalTime();
+            LocalTime startApptLocal = startAppt.toLocalTime();
+            if (startApptLocal.isBefore(open) || startApptLocal.isAfter(close) || endApptLocal.isBefore(open) || endApptLocal.isAfter(close)) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("WARNING");
                 alert.setContentText("Please select a time between business hours of 8am-10pm EST");
@@ -124,6 +126,10 @@ public class ApptAddController implements Initializable {
             Integer userId = Integer.parseInt(userIdCB.getValue().toString());
             Integer customerId = Integer.parseInt(custIdCB.getValue().toString());
             //Checks if appts overlap
+            System.out.println(startDT);
+            System.out.println(endDT);
+            System.out.println(customerId);
+            System.out.println("-Results:");
             if (overlapCheck(startDT, endDT, customerId) == false) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Time error");
@@ -148,24 +154,39 @@ public class ApptAddController implements Initializable {
                 Optional<ButtonType> result = alert.showAndWait();
                 return false;
             }
-        }
-        catch(Exception e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Please complete form");
-            alert.setContentText("Please do not leave any empty fields");
-            Optional<ButtonType> result = alert.showAndWait();
-            return false;
-        }
+
+
     }
 
     public boolean overlapCheck(LocalDateTime startDT, LocalDateTime endDT, Integer customerID) throws SQLException {
+        LocalDateTime startUTC = startDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+        LocalDateTime endUTC = endDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+        System.out.println("UTC:");
+        System.out.println(startUTC);
+        System.out.println(endUTC);
         ObservableList<Appointments> appts = DBappt.getAllAppts();
         for(Appointments appt : appts) {
-            if(appt.getCustomerID() == customerID && (startDT.isAfter(appt.getStartTime()) || endDT.isBefore(appt.getEndTime()))){
+            System.out.println("appt start");
+            System.out.println(appt.getStartTime());
+            if(appt.getCustomerID() == customerID && ((startUTC.isAfter(appt.getStartTime()) && startUTC.isBefore(appt.getEndTime())))){
 
                 return false;
             }
-        }
+            else if(appt.getCustomerID() == customerID && (endUTC.isBefore(appt.getEndTime()) && endUTC.isAfter(appt.getStartTime()))){
+                return false;
+            }
+            else if(appt.getCustomerID() == customerID && (startUTC.isEqual(appt.getStartTime()) && endUTC.isEqual(appt.getEndTime()))) {
+                return false;
+            }
+            else if(appt.getCustomerID() == customerID && (startUTC.isEqual(appt.getStartTime()) && endUTC.isAfter(appt.getEndTime()))) {
+            return false;
+            }
+            else if(appt.getCustomerID() == customerID && (endUTC.isEqual(appt.getEndTime()) && startUTC.isBefore(appt.getEndTime()))) {
+                return false;
+            }
+
+
+            }
         return true;
     }
 }

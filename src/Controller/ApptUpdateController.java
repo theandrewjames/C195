@@ -68,9 +68,9 @@ public class ApptUpdateController implements Initializable {
         contactCombo.setValue(appt.getContactName());
         typeTF.setText(appt.getApptType());
         startDateDP.setValue(appt.getStartTime().toLocalDate());
-        startCB.setValue(appt.getStartTime().format(dtf));
+        startCB.setValue(appt.getStartTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.of(String.valueOf(ZoneId.systemDefault()))).format(dtf));
         endDateDP.setValue(appt.getEndTime().toLocalDate());
-        endCB.setValue(appt.getEndTime().format(dtf));
+        endCB.setValue(appt.getEndTime().atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.of(String.valueOf(ZoneId.systemDefault()))).format(dtf));
         custIdCB.setValue(appt.getCustomerID());
         userIdCB.setValue(appt.getUserID());
     }
