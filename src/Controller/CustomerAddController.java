@@ -10,14 +10,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CustomerAddController implements Initializable {
@@ -53,7 +55,7 @@ public class CustomerAddController implements Initializable {
         stage.show();
     }
 
-    public void AddCustomerSave(ActionEvent actionEvent) throws IOException {
+    public boolean AddCustomerSave(ActionEvent actionEvent) throws IOException, SQLException {
         String name = nameTF.getText();
         String address = addressTF.getText();
         String phone = phoneTF.getText();
@@ -62,6 +64,22 @@ public class CustomerAddController implements Initializable {
         String country = (String) countryCB.getSelectionModel().getSelectedItem();
         String division = (String) divisionCB.getSelectionModel().getSelectedItem();
         Customers customer = new Customers(id, name, phone, address, postalCode, division, country);
+        if(DBCustomer.addCustomer(customer) == 1) {
+            Parent root = FXMLLoader.load(getClass().getResource("/View/customerView.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+            return true;
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Database error");
+            alert.setContentText("Unable to add customer. Please try again");
+            Optional<ButtonType> result = alert.showAndWait();
+            return false;
+        }
+
     }
 
     public void loadDivision(ActionEvent actionEvent) throws SQLException {

@@ -11,6 +11,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -23,6 +25,7 @@ import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class apptViewController implements Initializable {
@@ -125,9 +128,21 @@ public class apptViewController implements Initializable {
     }
 
     public void DeleteAppt(ActionEvent actionEvent) throws SQLException {
-        Appointments appt = apptTV.getSelectionModel().getSelectedItem();
-        DBappt.deleteAppt(appt);
-        apptTV.setItems(DBappt.getAllAppts());
+        try {
+            Appointments appt = apptTV.getSelectionModel().getSelectedItem();
+            DBappt.deleteAppt(appt);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Appointment deleted");
+            alert.setContentText("Appointment ID: " + appt.getApptID() + " & Type: " + appt.getApptType() + " deleted");
+            Optional<ButtonType> result = alert.showAndWait();
+            apptTV.setItems(DBappt.getAllAppts());
+        }
+        catch(Exception e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Nothing selected or unable to delete");
+            alert.setContentText("Nothing selected or unable to delete");
+            Optional<ButtonType> result = alert.showAndWait();
+        }
     }
 
     public void EditAppt(ActionEvent actionEvent) throws IOException {

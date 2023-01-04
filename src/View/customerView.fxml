@@ -20,7 +20,7 @@
       </TableView>
       <Button fx:id="addButton" layoutX="83.0" layoutY="285.0" mnemonicParsing="false" onAction="#Add" text="Add" />
       <Button fx:id="editButton" onAction="#Update" layoutX="121.0" layoutY="285.0" mnemonicParsing="false" text="Edit" />
-      <Button fx:id="deleteButton" layoutX="158.0" layoutY="285.0" mnemonicParsing="false" text="Delete" />
+      <Button onAction="#Delete" fx:id="deleteButton" layoutX="158.0" layoutY="285.0" mnemonicParsing="false" text="Delete" />
       <Button fx:id="backButton" layoutX="209.0" layoutY="285.0" mnemonicParsing="false" onAction="#Back" text="Back" />
    </children>
 </AnchorPane>

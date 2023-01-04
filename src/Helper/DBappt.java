@@ -76,6 +76,31 @@ public class DBappt {
         int rs = ps.executeUpdate();
         return rs;
     }
+    public static int updateAppt(Appointments appt) throws SQLException {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String contactName = appt.getContactName();
+        Integer contactId = 0;
+        if(contactName.equals("Anika Costa")) contactId = 1;
+        else if(contactName.equals("Daniel Garcia")) contactId = 2;
+        else contactId =3;
+        String sql = "UPDATE appointments SET Appointment_ID=?,Title=?, Description=?, Location=?, Type=?, Start=?,End=?,Last_Update=?,Last_Updated_By=?,Customer_ID=?,User_ID=?,Contact_ID=? WHERE Appointment_ID=?";
+        PreparedStatement ps = Database.connection.prepareStatement(sql);
+        ps.setInt(1, appt.getApptID());
+        ps.setString(2, appt.getApptTitle());
+        ps.setString(3, appt.getApptDescription());
+        ps.setString(4, appt.getApptLocation());
+        ps.setString(5, appt.getApptType());
+        ps.setTimestamp(6, Timestamp.valueOf(appt.getStartTime().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).format(dtf)));
+        ps.setTimestamp(7, Timestamp.valueOf(appt.getEndTime().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).format(dtf)));
+        ps.setTimestamp(8, Timestamp.valueOf(ZonedDateTime.now(ZoneOffset.UTC).format(dtf)));
+        ps.setString(9, "Admin");
+        ps.setInt(10, appt.getCustomerID());
+        ps.setInt(11, appt.getUserID());
+        ps.setInt(12, contactId);
+        ps.setInt(13, appt.getApptID());
+        int rs = ps.executeUpdate();
+        return rs;
+    }
     public static void deleteAppt(Appointments appt) throws SQLException {
         String sql = "DELETE from appointments WHERE Appointment_ID = ?";
         PreparedStatement ps = Database.connection.prepareStatement(sql);

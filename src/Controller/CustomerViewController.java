@@ -10,15 +10,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CustomerViewController implements Initializable {
@@ -38,6 +37,7 @@ public class CustomerViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         ObservableList<Customers> allCustomers = null;
         try {
             allCustomers = DBCustomer.getAllCustomers();
@@ -79,5 +79,22 @@ public class CustomerViewController implements Initializable {
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+    }
+    public void Delete(ActionEvent actionEvent) throws IOException, SQLException {
+        try {
+            Customers customer = (Customers) customerTV.getSelectionModel().getSelectedItem();
+            DBCustomer.deleteCustomer(customer);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Customer deleted");
+            alert.setContentText("Customer deleted");
+            Optional<ButtonType> result = alert.showAndWait();
+            customerTV.setItems(DBCustomer.getAllCustomers());
+        }
+        catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Nothing selected or unable to delete");
+            alert.setContentText("Nothing selected or unable to delete");
+            Optional<ButtonType> result = alert.showAndWait();
+        }
     }
 }
