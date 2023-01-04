@@ -8,7 +8,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Controller for contacts
+ */
 public class DBContacts {
+    /**
+     * Gets all contacts
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<Contacts>getAllContacts() throws SQLException {
     ObservableList<Contacts> contacts = FXCollections.observableArrayList();
     String sql = "SELECT * FROM contacts";
@@ -23,6 +31,12 @@ public class DBContacts {
         }
         return contacts;
     }
+
+    /**
+     * Gets all distinct contact names
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<String>getContactNames() throws SQLException {
         ObservableList<String> contactNames = FXCollections.observableArrayList();
         String sql = "SELECT DISTINCT Contact_Name FROM contacts";

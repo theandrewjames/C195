@@ -11,7 +11,11 @@ import javax.xml.crypto.Data;
 import java.util.Locale;
 
 public class Main extends Application {
-
+    /**
+     * Loads primary screen
+     * @param primaryStage
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../View/Login.fxml"));

@@ -11,10 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -40,8 +37,13 @@ public class apptViewController implements Initializable {
     public TableColumn<Appointments, LocalDateTime> endCol;
     public TableColumn<Appointments, Integer> custIDCol;
     public TableColumn<Appointments, Integer> userIDCol;
+    public Button backButton;
 
-
+    /**
+     * Grabs all appts and loads them in tableview
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -67,7 +69,7 @@ public class apptViewController implements Initializable {
     }
 
     /**
-     *
+     * Lambda expression. This saves lines of code by not having to write out a loop to loop through each appt
      * @param actionEvent filters appts by current week
      * @throws SQLException
      */
@@ -86,7 +88,7 @@ public class apptViewController implements Initializable {
     }
 
     /**
-     *
+     * Lambda expression. This saves lines of code by not having to write out a loop
      * @param actionEvent filters appointment tableview by current month
      * @throws SQLException
      */
@@ -127,6 +129,11 @@ public class apptViewController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Deletes selected appt or shows error if none selected
+     * @param actionEvent
+     * @throws SQLException
+     */
     public void DeleteAppt(ActionEvent actionEvent) throws SQLException {
         try {
             Appointments appt = apptTV.getSelectionModel().getSelectedItem();
@@ -145,6 +152,11 @@ public class apptViewController implements Initializable {
         }
     }
 
+    /**
+     * Grabs selected item from tableview and displays it on the update screen
+     * @param actionEvent
+     * @throws IOException
+     */
     public void EditAppt(ActionEvent actionEvent) throws IOException {
         Appointments appt = apptTV.getSelectionModel().getSelectedItem();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/apptUpdate.fxml"));
@@ -157,6 +169,11 @@ public class apptViewController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Takes user to add appt screen
+     * @param actionEvent
+     * @throws IOException
+     */
     public void AddAppt(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/apptAdd.fxml"));
         Scene scene = new Scene(root);

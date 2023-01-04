@@ -27,7 +27,7 @@
       <Button onAction="#AddAppt" layoutX="114.0" layoutY="291.0" mnemonicParsing="false" text="Add" />
       <Button onAction="#EditAppt" layoutX="152.0" layoutY="291.0" mnemonicParsing="false" text="Edit" />
       <Button onAction="#DeleteAppt" layoutX="189.0" layoutY="291.0" mnemonicParsing="false" text="Delete" />
-      <Button onAction="#Back" layoutX="240.0" layoutY="291.0" mnemonicParsing="false" text="Back" />
+      <Button fx:id="backButton" onAction="#Back" layoutX="240.0" layoutY="291.0" mnemonicParsing="false" text="Back" />
       <RadioButton layoutX="84.0" layoutY="66.0" mnemonicParsing="false" onAction="#filterWeek" text="Week">
          <toggleGroup>
             <ToggleGroup fx:id="filterRadio" />

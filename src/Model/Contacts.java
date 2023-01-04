@@ -13,7 +13,21 @@ public class Contacts {
         this.contactEmail = contactEmail;
     }
 
+    /**
+     * Getter of contact ID
+     * @return contactID
+     */
     public Integer getContactId() {return contactId;};
+
+    /**
+     * Getter of customer name
+     * @return customer name
+     */
     public String getContactName() {return contactName;};
+
+    /**
+     * getter of contact email
+     * @return contact email
+     */
     public String getContactEmail() {return contactEmail;};
 }

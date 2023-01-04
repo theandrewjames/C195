@@ -13,7 +13,7 @@
       <TextField fx:id="passwordTF" layoutX="202.0" layoutY="158.0" />
       <Label fx:id="locLabel" layoutX="204.0" layoutY="85.0" text="Location/Hidden" />
       <Button fx:id="loginButton" layoutX="202.0" layoutY="194.0" mnemonicParsing="false" onAction="#toDirectory" text="Login" />
-      <Button fx:id="exitButton" layoutX="300.0" layoutY="194.0" mnemonicParsing="false" onAction="#ExitWindow" text="Exit" />
+      <Button fx:id="exitButton" layoutX="300.0" layoutY="194.0" mnemonicParsing="false"  text="Exit" />
       <Label fx:id="warningLabel" layoutX="202.0" layoutY="228.0" prefHeight="17.0" prefWidth="210.0" />
    </children>
 </AnchorPane>

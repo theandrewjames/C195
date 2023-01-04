@@ -20,6 +20,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Shows customers in tableview
+ */
 public class CustomerViewController implements Initializable {
 
     public TableView customerTV;
@@ -35,6 +38,11 @@ public class CustomerViewController implements Initializable {
     public TableColumn custDivisionTC;
     public TableColumn custCountryTC;
 
+    /**
+     * Grabs customers and displasy them in tableview
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -55,6 +63,12 @@ public class CustomerViewController implements Initializable {
 
 
     }
+
+    /**
+     * Takes user to add customer screen
+     * @param actionEvent
+     * @throws IOException
+     */
     public void Add(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/customerAdd.fxml"));
         Scene scene = new Scene(root);
@@ -62,6 +76,13 @@ public class CustomerViewController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * Grabs selected customer and takes user to update customer screen
+     * @param actionEvent
+     * @throws IOException
+     * @throws SQLException
+     */
     public void Update(ActionEvent actionEvent) throws IOException, SQLException {
         Customers customer = (Customers) customerTV.getSelectionModel().getSelectedItem();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/customerUpdate.fxml"));
@@ -73,6 +94,12 @@ public class CustomerViewController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * Takes user to previous screen
+     * @param actionEvent
+     * @throws IOException
+     */
     public void Back(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/Directory.fxml"));
         Scene scene = new Scene(root);
@@ -80,6 +107,13 @@ public class CustomerViewController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * Deletes selected customer. If none selected it displays an error
+     * @param actionEvent
+     * @throws IOException
+     * @throws SQLException
+     */
     public void Delete(ActionEvent actionEvent) throws IOException, SQLException {
         try {
             Customers customer = (Customers) customerTV.getSelectionModel().getSelectedItem();

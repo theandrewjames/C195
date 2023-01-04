@@ -22,6 +22,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Controller to add new customers
+ */
 public class CustomerAddController implements Initializable {
 
 
@@ -33,6 +36,11 @@ public class CustomerAddController implements Initializable {
     public ComboBox countryCB;
     public ComboBox divisionCB;
 
+    /**
+     * loads countries combo boxes & customer ID
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ObservableList<String> countries = FXCollections.observableArrayList();
@@ -47,6 +55,12 @@ public class CustomerAddController implements Initializable {
         }
 
     }
+
+    /**
+     * Takes user to previous screen
+     * @param actionEvent
+     * @throws IOException
+     */
     public void Back(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/CustomerView.fxml"));
         Scene scene = new Scene(root);
@@ -55,6 +69,13 @@ public class CustomerAddController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Grabs values and  saves the customer
+     * @param actionEvent
+     * @return
+     * @throws IOException
+     * @throws SQLException
+     */
     public boolean AddCustomerSave(ActionEvent actionEvent) throws IOException, SQLException {
         String name = nameTF.getText();
         String address = addressTF.getText();
@@ -82,6 +103,11 @@ public class CustomerAddController implements Initializable {
 
     }
 
+    /**
+     * Upon selecting a countyr this loads the correct divisions
+     * @param actionEvent
+     * @throws SQLException
+     */
     public void loadDivision(ActionEvent actionEvent) throws SQLException {
         String country = (String) countryCB.getSelectionModel().getSelectedItem();
         divisionCB.setItems(DBCustomer.getDivisions(country));

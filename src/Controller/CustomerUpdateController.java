@@ -23,6 +23,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Updates customer on page
+ */
 public class CustomerUpdateController implements Initializable {
     public ComboBox divisionCB;
     public ComboBox countryCB;
@@ -32,6 +35,11 @@ public class CustomerUpdateController implements Initializable {
     public TextField postalCodeTF;
     public TextField phoneTF;
 
+    /**
+     * Returns user to previous screen
+     * @param actionEvent
+     * @throws IOException
+     */
     public void Back(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/customerView.fxml"));
         Scene scene = new Scene(root);
@@ -40,6 +48,13 @@ public class CustomerUpdateController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Grabs inputted values and saves customer
+     * @param actionEvent
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
     public boolean UpdateCustomerSave(ActionEvent actionEvent) throws SQLException, IOException {
         String name = nameTF.getText();
         String address = addressTF.getText();
@@ -65,11 +80,21 @@ public class CustomerUpdateController implements Initializable {
         }
     }
 
+    /**
+     * upon selecting a country this loads the appropriate divisions
+     * @param actionEvent
+     * @throws SQLException
+     */
     public void loadDivision(ActionEvent actionEvent) throws SQLException {
         String country = (String) countryCB.getSelectionModel().getSelectedItem();
         divisionCB.setItems(DBCustomer.getDivisions(country));
     }
 
+    /**
+     * Popules countries combo boxes
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ObservableList<String> countries = FXCollections.observableArrayList();
@@ -77,6 +102,11 @@ public class CustomerUpdateController implements Initializable {
         countryCB.setItems(countries);
     }
 
+    /**
+     * Populates screen with info from selected customer
+     * @param customer
+     * @throws SQLException
+     */
     public void loadCustomer(Customers customer) throws SQLException {
         idTF.setText(String.valueOf(customer.getCustomerId()));
         nameTF.setText(customer.getCustomerName());

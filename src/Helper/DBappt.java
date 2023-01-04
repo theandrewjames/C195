@@ -3,16 +3,50 @@ package Helper;
 import Model.Appointments;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
-//Retrieves all appointments
+
+/**
+ * Retrieves appointments
+ */
 public class DBappt {
+    /**
+     * Gets all appointments for each month
+     * @throws SQLException
+     */
+    public static void getApptsByMonth() throws SQLException {
+        String results = "";
+        int i = 1;
+        while(i < 13) {
+            String sql = "SELECT count(Type), Type from appointments where Month(Start) = ? group by Type;";
+            PreparedStatement ps = Database.connection.prepareStatement(sql);
+            ps.setInt(1, i);
+            results = results + "\n" + Month.of(i) + " " + "Number & Type of appointments:";
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                    results = results + "\n" + rs.getInt("count(Type)") + " " + rs.getString("Type");
+            }
+            if(rs.next() == false) {
+                i++;
+            }
+        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Report");
+        alert.setContentText(results);
+        Optional<ButtonType> result = alert.showAndWait();
+    }
+
+    /**
+     * Gets all appointments
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<Appointments>getAllAppts() throws SQLException {
         ObservableList<Appointments> appts = FXCollections.observableArrayList();
         String sql = "SELECT appointments.Appointment_ID,appointments.Title,appointments.Description,\n" +
@@ -39,6 +73,12 @@ public class DBappt {
         return appts;
 
     }
+
+    /**
+     * Generates next available appt id
+     * @return
+     * @throws SQLException
+     */
     public static int getNextApptId() throws SQLException {
         String sql = "SELECT max(Appointment_ID) FROM appointments";
         PreparedStatement ps = Database.connection.prepareStatement(sql);
@@ -49,6 +89,13 @@ public class DBappt {
         }
         return highest;
     }
+
+    /**
+     * Adds appt to database
+     * @param appointments
+     * @return
+     * @throws SQLException
+     */
     public static int addAppt(Appointments appointments) throws  SQLException {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String contactName = appointments.getContactName();
@@ -76,6 +123,13 @@ public class DBappt {
         int rs = ps.executeUpdate();
         return rs;
     }
+
+    /**
+     * Updates appt to database
+     * @param appt
+     * @return
+     * @throws SQLException
+     */
     public static int updateAppt(Appointments appt) throws SQLException {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String contactName = appt.getContactName();
@@ -101,10 +155,48 @@ public class DBappt {
         int rs = ps.executeUpdate();
         return rs;
     }
+
+    /**
+     * deletes appt from database
+     * @param appt
+     * @throws SQLException
+     */
     public static void deleteAppt(Appointments appt) throws SQLException {
         String sql = "DELETE from appointments WHERE Appointment_ID = ?";
         PreparedStatement ps = Database.connection.prepareStatement(sql);
         ps.setInt(1,appt.getApptID());
         int rowsAffected = ps.executeUpdate();
+    }
+
+    /**
+     * Gets appointments for selected contact
+     * @throws SQLException
+     */
+    public static void getApptByContact() throws  SQLException {
+        String sql = "SELECT * from appointments where Contact_ID=?";
+        PreparedStatement ps = Database.connection.prepareStatement(sql);
+        int i = 1;
+        String results = "";
+        String contactName = "";
+        while(i < 4) {
+            ps.setInt(1, i);
+            if(i == 1) contactName = "Anika Costa";
+            else if(i == 2) contactName = "Daniel Garcia";
+            else if(i == 3) contactName = "Li Lee";
+            results = results + "\n" + "Schedule for " + contactName + "\n";
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                results += "\n" + "Appt ID: " + rs.getInt("Appointment_ID") + " Title: "
+                        + rs.getString("Title") + " Type: " + rs.getString("Type") +
+                        " Description: " + rs.getString("Description") + " Start: " + rs.getTimestamp("Start").toLocalDateTime()
+                        + " End: " + rs.getTimestamp("End").toLocalDateTime() + " Customer ID: " + rs.getInt("Customer_ID") + "\n";
+
+            }
+            if(rs.next() == false) i++;
+        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Report");
+        alert.setContentText(results);
+        Optional<ButtonType> result = alert.showAndWait();
     }
 }

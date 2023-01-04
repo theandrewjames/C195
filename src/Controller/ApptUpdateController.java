@@ -23,6 +23,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Controller that loads appt info and updates it
+ */
 public class ApptUpdateController implements Initializable {
     public TextField apptIDTF;
     public TextField apptTitleTF;
@@ -37,6 +40,11 @@ public class ApptUpdateController implements Initializable {
     public ComboBox custIdCB;
     public ComboBox userIdCB;
 
+    /**
+     * Returns user to previous screen
+     * @param actionEvent
+     * @throws IOException
+     */
     public void Back(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/apptView.fxml"));
         Scene scene = new Scene(root);
@@ -45,6 +53,13 @@ public class ApptUpdateController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Grabs appt values and updates appt if it passes validity checks
+     * @param actionEvent
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
     public  boolean UpdateAppt(ActionEvent actionEvent) throws SQLException, IOException {
         Integer apptId = Integer.parseInt(apptIDTF.getText());
         String title = apptTitleTF.getText();
@@ -83,10 +98,6 @@ public class ApptUpdateController implements Initializable {
         Integer userId = Integer.parseInt(userIdCB.getValue().toString());
         Integer customerId = Integer.parseInt(custIdCB.getValue().toString());
         //Checks if appts overlap
-        System.out.println(startDT);
-        System.out.println(endDT);
-        System.out.println(customerId);
-        System.out.println("-Results:");
         if (overlapCheck(startDT, endDT, customerId, apptId) == false) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Time error");
@@ -131,6 +142,9 @@ public class ApptUpdateController implements Initializable {
     }
 
     @Override
+    /**
+     * Initialize loads the start/end time, user id and customer id combo boxes
+     */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ObservableList<String> times = FXCollections.observableArrayList();
         String [] halfHour = {"00", "30"};
@@ -155,16 +169,21 @@ public class ApptUpdateController implements Initializable {
             throwables.printStackTrace();
         }
     }
+
+    /**
+     * Checks if appt overlaps any pre-existing appts EXCEPT for the one being updated
+     * @param startDT
+     * @param endDT
+     * @param customerID
+     * @param apptId
+     * @return
+     * @throws SQLException
+     */
     public boolean overlapCheck(LocalDateTime startDT, LocalDateTime endDT, Integer customerID, Integer apptId) throws SQLException {
         LocalDateTime startUTC = startDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
         LocalDateTime endUTC = endDT.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
-        System.out.println("UTC:");
-        System.out.println(startUTC);
-        System.out.println(endUTC);
         ObservableList<Appointments> appts = DBappt.getAllAppts();
         for(Appointments appt : appts) {
-            System.out.println("appt start");
-            System.out.println(appt.getStartTime());
             if(appt.getCustomerID() == customerID && appt.getApptID() != apptId && ((startUTC.isAfter(appt.getStartTime()) && startUTC.isBefore(appt.getEndTime())))){
 
                 return false;

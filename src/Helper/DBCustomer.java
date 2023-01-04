@@ -15,7 +15,15 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+/**
+ * Manipulates database customer records
+ */
 public class DBCustomer {
+    /**
+     * gets all customers
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<Customers> getAllCustomers() throws SQLException {
         ObservableList<Customers> customers = FXCollections.observableArrayList();
         String sql = "SELECT customers.Customer_ID, customers.customer_name, customers.address, customers.Postal_Code, customers.Phone, first_level_divisions.Division,  customers.Division_ID, countries.country \n" +
@@ -37,6 +45,13 @@ public class DBCustomer {
         }
         return customers;
     }
+
+    /**
+     * Gets all divisions
+     * @param country
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<String> getDivisions(String country) throws SQLException {
         int countryId = 0;
         if(country.equals("U.S")) countryId = 1;
@@ -52,6 +67,13 @@ public class DBCustomer {
         }
         return divisions;
     }
+
+    /**
+     * Gets division id based on parameter division string
+     * @param division
+     * @return
+     * @throws SQLException
+     */
     public static int getDivisionId(String division) throws SQLException {
         String sql = "SELECT Division_ID from first_level_divisions WHERE Division=?";
         PreparedStatement ps = Database.connection.prepareStatement(sql);
@@ -63,6 +85,12 @@ public class DBCustomer {
         }
         return  divisionID;
     }
+
+    /**
+     * Gets next available customer ID and returns it
+     * @return
+     * @throws SQLException
+     */
     public static int getNextCusId() throws SQLException {
         String sql = "SELECT MAX(Customer_ID) from customers";
         PreparedStatement ps = Database.connection.prepareStatement(sql);
@@ -73,6 +101,12 @@ public class DBCustomer {
         }
         return highest;
     }
+
+    /**
+     * Gets all customer ids and returns them
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<Integer> GetCustIds() throws SQLException {
         ObservableList<Integer> custIds = FXCollections.observableArrayList();
         String sql = "SELECT Customer_ID from customers ORDER BY Customer_ID";
@@ -84,6 +118,12 @@ public class DBCustomer {
         }
         return custIds;
     }
+
+    /**
+     * Deletes customer ID if paramter customer matches existing customer
+     * @param customers
+     * @throws SQLException
+     */
     public static void deleteCustomer(Customers customers) throws SQLException {
         String sql = "SELECT * FROM appointments where Customer_ID =?";
         PreparedStatement ps = Database.connection.prepareStatement(sql);
@@ -102,6 +142,13 @@ public class DBCustomer {
             int rows = ps1.executeUpdate();
         }
     }
+
+    /**
+     * Adds customer to database
+     * @param customers
+     * @return
+     * @throws SQLException
+     */
     public static int addCustomer(Customers customers) throws SQLException {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -121,6 +168,13 @@ public class DBCustomer {
         int rs = ps.executeUpdate();
         return rs;
     }
+
+    /**
+     * Updates customer
+     * @param customers
+     * @return
+     * @throws SQLException
+     */
     public static int updateCustomer(Customers customers) throws SQLException {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String sql = "UPDATE customers SET Customer_Name=?,Address=?,Postal_Code=?,Phone=?,Last_Update=?,Last_Updated_By=?,Division_ID=? WHERE Customer_ID=?";
@@ -135,5 +189,27 @@ public class DBCustomer {
         ps.setInt(8, customers.getCustomerId());
         int rs = ps.executeUpdate();
         return rs;
+    }
+
+    /**
+     * For report which shows how many customers in each country
+     * @throws SQLException
+     */
+    public static void groupByCountry() throws SQLException {
+        String sql = "SELECT COUNT(customers.Customer_ID),countries.country FROM ((customers\n" +
+                "INNER JOIN first_level_divisions on customers.Division_ID = first_level_divisions.Division_ID)\n" +
+                "INNER JOIN countries ON first_level_divisions.Country_ID = countries.Country_ID)\n" +
+                "GROUP BY country";
+        PreparedStatement ps = Database.connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        String results = "";
+        while(rs.next()) {
+            results += "\n" + "Total number of customers in " + rs.getString("country") + " is "
+                    + rs.getInt("COUNT(customers.Customer_ID)");
+        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Report");
+        alert.setContentText(results);
+        Optional<ButtonType> result = alert.showAndWait();
     }
 }

@@ -15,6 +15,9 @@ public class Database {
     public static  Connection connection;
     public static Connection getConnection;
 
+    /**
+     * Opens connection
+     */
     public static void openConnection() {
         try {
             Class.forName(driver);
@@ -25,9 +28,18 @@ public class Database {
             System.out.println("error:" + e.getMessage());
         }
     }
+
+    /**
+     * Gets connection
+     * @return
+     */
     public static Connection getConnection() {
         return connection;
     }
+
+    /**
+     * closes connection
+     */
     public static void closeConnection() {
         try {
             connection.close();
