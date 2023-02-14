@@ -38,6 +38,7 @@ public class apptViewController implements Initializable {
     public TableColumn<Appointments, Integer> custIDCol;
     public TableColumn<Appointments, Integer> userIDCol;
     public Button backButton;
+    public TextField searchTF;
 
     /**
      * Grabs all appts and loads them in tableview
@@ -180,5 +181,28 @@ public class apptViewController implements Initializable {
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void Search(ActionEvent actionEvent) throws SQLException {
+        String searchString = searchTF.getText().toString();
+        if(searchString != null) {
+            ObservableList<Appointments> allAppts = DBappt.getAllAppts();
+        ObservableList<Appointments> searchFiltered = FXCollections.observableArrayList();
+        for(Appointments appt : allAppts) {
+            if(appt.getApptID().toString().contains(searchString) || appt.getApptTitle().contains(searchString)
+            || appt.getApptDescription().contains(searchString) || appt.getApptLocation().contains(searchString)
+            || appt.getApptType().contains(searchString) || appt.getStartTime().toString().contains(searchString)
+            || appt.getEndTime().toString().contains(searchString) || appt.getCustomerID().toString().contains(searchString)
+            || appt.getUserID().toString().contains(searchString) || appt.getContactName().contains(searchString)) {
+                searchFiltered.add(appt);
+            }
+        }
+        apptTV.setItems(searchFiltered);
+        }
+        else {
+            ObservableList<Appointments> allAppts = DBappt.getAllAppts();
+            apptTV.setItems(allAppts);
+        }
+
     }
 }
